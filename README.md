@@ -1,1 +1,1 @@
-# My-App
+# ReactFlask_JWT_StarterCode

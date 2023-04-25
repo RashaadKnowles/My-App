@@ -31,3 +31,14 @@ class Car(db.Model):
     user = db.relationship("User")
 
 # TODO: Add your models below, remember to add a new migration and upgrade database
+
+class Dispatcher(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    company_name = db.Column(db.String(255), nullable=False)
+    tier_level = db.Column(db.Integer)
+    email = db.Column(db.String(255), nullable=False)
+    phone_number = db.Column(db.Integer)
+    liked_trucks = db.Column(db.String(255), nullable=False)
+    bio = db.Column(db.String(255), nullable=False)
+    message = db.Column(db.String(255), nullable=False)

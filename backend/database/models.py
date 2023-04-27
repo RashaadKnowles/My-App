@@ -32,7 +32,7 @@ class Car(db.Model):
 
 # TODO: Add your models below, remember to add a new migration and upgrade database
 
-class Dispatcher(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     company_name = db.Column(db.String(255), nullable=False)
@@ -42,3 +42,29 @@ class Dispatcher(db.Model):
     liked_trucks = db.Column(db.String(255), nullable=False)
     bio = db.Column(db.String(255), nullable=False)
     message = db.Column(db.String(255), nullable=False)
+    owner_operator = db.Column(db.String(225), nullable=True)
+    dispatcher = db.Column(db.String(255), nullable=False)
+    is_dispatcher = True
+    is_owner_operator = True
+    
+    
+
+
+    
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    witten_review_id = db.Column(db.Integer, db.ForeignKey('dispatcher.id'))
+    review_about_id = db.Column(db.Integer, db.ForeignKey('owner_operator.id'))
+    written_review = db.relationshp("User")
+    review_about = db.relationshp("User")
+    comment = db.Column(db.String(225), nullable=False)
+
+ 
+
+
+
+
+    
+
+
+

@@ -1,6 +1,6 @@
 from flask_marshmallow import Marshmallow
 from marshmallow import post_load, fields
-from database.models import User, Car
+from database.models import User, Car, Review
 
 ma = Marshmallow()
 
@@ -59,3 +59,41 @@ cars_schema = CarSchema(many=True)
 
 
 # TODO: Add your schemas below
+
+class UserSchema(ma.Schema):
+    
+    id = fields.Integer(primary_key=True)
+    name = fields.String(required=True)
+    company_name = fields.String(required=True)
+    tier_level = fields.Integer(required=True)
+    phone_number = fields.Integer(required=True)
+    email = fields.String(required=True)
+    bio = fields.String(required=True)
+    liked_trucks = fields.String()
+    messages = fields.String(required=True)
+    class Meta:
+        fields = ("id", "name", "company_name", "tier_level", "phone_number", "email", "bio", "liked_trucks", "messages")
+
+        @post_load
+        def create_user(self, data, **kwargs):
+            return User(**data)
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+
+
+class ReviewSchema(ma.Schema):
+    id = fields.Integer(primary_key=True)
+    comment = fields.String(required=True)
+    written_review_id = fields.Integer()
+    review_about_id = fields.Integer()
+    written_review = ma.Nested(UserSchema, many=False)
+    review_about = ma.Nested(UserSchema, many=False)
+
+    class Meta:
+            fields = ("id", "comment","written_review_id", "written_review", "review_about_id", "review_about")
+
+            @post_load
+            def create_review(self, data, **kwargs):
+                return Review(**data)
+review_schema = ReviewSchema()
+reviews_schema = ReviewSchema(many=True)

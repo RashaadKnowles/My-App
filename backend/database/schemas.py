@@ -1,6 +1,6 @@
 from flask_marshmallow import Marshmallow
 from marshmallow import post_load, fields
-from database.models import User, Car, Review
+from database.models import User, Car, Review, Post
 
 ma = Marshmallow()
 
@@ -15,8 +15,9 @@ class RegisterSchema(ma.Schema):
     first_name = fields.String(required=True)
     last_name = fields.String(required=True)
     email = fields.String(required=True)
+    is_owner_operator = fields.Boolean(required=True)
     class Meta:
-        fields = ("id", "username",  "password", "first_name", "last_name", "email")
+        fields = ("id", "username",  "password", "first_name", "last_name", "email", "is_owner_operator")
 
     @post_load
     def create_user(self, data, **kwargs):
@@ -68,15 +69,16 @@ class UserSchema(ma.Schema):
     tier_level = fields.Integer(required=True)
     phone_number = fields.Integer(required=True)
     email = fields.String(required=True)
-    bio = fields.String(required=True)
+    bio = fields.String()
     liked_trucks = fields.String()
-    messages = fields.String(required=True)
+    messages = fields.String()
+    is_owner_operator = fields.Boolean(required=True)
     class Meta:
-        fields = ("id", "name", "company_name", "tier_level", "phone_number", "email", "bio", "liked_trucks", "messages")
+        fields = ("id", "name", "company_name", "tier_level", "phone_number", "email", "bio", "liked_trucks", "messages", "is_owner_operator")
 
-        @post_load
-        def create_user(self, data, **kwargs):
-            return User(**data)
+    @post_load
+    def create_user(self, data, **kwargs):
+        return User(**data)
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
@@ -90,10 +92,27 @@ class ReviewSchema(ma.Schema):
     review_about = ma.Nested(UserSchema, many=False)
 
     class Meta:
-            fields = ("id", "comment","written_review_id", "written_review", "review_about_id", "review_about")
+        fields = ("id", "comment","written_review_id", "written_review", "review_about_id", "review_about")
 
-            @post_load
-            def create_review(self, data, **kwargs):
-                return Review(**data)
+    @post_load
+    def create_review(self, data, **kwargs):
+        return Review(**data)
 review_schema = ReviewSchema()
 reviews_schema = ReviewSchema(many=True)
+
+
+
+class PostSchema(ma.Schema):
+    id = fields.Integer(primary_key=True)
+    comment = fields.String(required=True)
+    comment_about_post_id = fields.Integer()
+    comment_about_post = ma.Nested(UserSchema, many=False)
+
+    class Meta:
+        fields = ('id', "comment", "comment_about_post_id", "comment_about_post")
+
+    @post_load
+    def create_post(self,data, **kwargs):
+        return Post(**data)
+post_schema = PostSchema()
+posts_schema = PostSchema(many=True)

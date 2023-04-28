@@ -10,7 +10,13 @@ class User(db.Model):
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False, unique=True)
-
+    company_name = db.Column(db.String(255), )
+    tier_level = db.Column(db.Integer)
+    phone_number = db.Column(db.Integer)
+    liked_trucks = db.Column(db.String(255))
+    bio = db.Column(db.String(255))
+    message = db.Column(db.String(255))
+    is_owner_operator = db.Column(db.Boolean, nullable=False)
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf8')
 
@@ -32,36 +38,20 @@ class Car(db.Model):
 
 # TODO: Add your models below, remember to add a new migration and upgrade database
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
-    company_name = db.Column(db.String(255), nullable=False)
-    tier_level = db.Column(db.Integer)
-    email = db.Column(db.String(255), nullable=False)
-    phone_number = db.Column(db.Integer)
-    liked_trucks = db.Column(db.String(255), nullable=False)
-    bio = db.Column(db.String(255), nullable=False)
-    message = db.Column(db.String(255), nullable=False)
-    owner_operator = db.Column(db.String(225), nullable=True)
-    dispatcher = db.Column(db.String(255), nullable=False)
-    is_dispatcher = True
-    is_owner_operator = True
-    
-    
-
-
     
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    witten_review_id = db.Column(db.Integer, db.ForeignKey('dispatcher.id'))
-    review_about_id = db.Column(db.Integer, db.ForeignKey('owner_operator.id'))
-    written_review = db.relationshp("User")
-    review_about = db.relationshp("User")
+    written_review_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    review_about_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    written_review = db.relationship("User", foreign_keys=[written_review_id])
+    review_about = db.relationship("User",foreign_keys=[review_about_id])
     comment = db.Column(db.String(225), nullable=False)
 
- 
-
-
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.String(225), nullable=False)
+    comment_about_post_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    comment_about_post = db.relationship("User",foreign_keys=[comment_about_post_id])
 
 
     

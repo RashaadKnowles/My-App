@@ -64,9 +64,10 @@ cars_schema = CarSchema(many=True)
 class UserSchema(ma.Schema):
     
     id = fields.Integer(primary_key=True)
-    name = fields.String(required=True)
+    first_name = fields.String(required=True)
+    last_name = fields.String(required=True)
     company_name = fields.String(required=True)
-    tier_level = fields.Integer(required=True)
+    tier_level = fields.Integer()
     phone_number = fields.Integer(required=True)
     email = fields.String(required=True)
     bio = fields.String()

@@ -10,8 +10,9 @@ const RegisterPage = () => {
     password: "",
     firstName: "",
     lastName: "",
+    companyName: "",
   };
-  const [formData, handleInputChange, handleSubmit] = useCustomForm(
+  const [formData, handleInputChange, handleSubmit, finalData] = useCustomForm(
     defaultValues,
     registerUser
   );
@@ -64,7 +65,25 @@ const RegisterPage = () => {
             onChange={handleInputChange}
           />
         </label>
-        <button>Register!</button>
+        <label>
+          Company Name:{" "}
+          <input
+            type="companyName"
+            name="companyName"
+            value={formData.companyName}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Owner Operator:{" "}
+          <input
+            type="dispatcher"
+            name="is_owner_operator"
+            value={finalData.is_owner_operator}
+            onChange={handleInputChange}
+          />
+        </label>
+        <button type="submit" data-testid="submit btn">Register</button>        
       </form>
     </div>
   );

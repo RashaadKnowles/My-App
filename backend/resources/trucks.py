@@ -8,6 +8,14 @@ from database.schemas import user_schema, users_schema,reviews_schema,review_sch
 class UserReviewResource(Resource):
 
     @jwt_required()
+    def get(self, user_id):
+      
+        user_reviews = Review.query.filter_by(review_about_id=user_id)
+        return reviews_schema.dump(user_reviews), 200
+
+
+class PostUserReview(Resource):
+    @jwt_required()
     def post(self):
         user_id = get_jwt_identity()
         form_data = request.get_json()
@@ -16,13 +24,7 @@ class UserReviewResource(Resource):
         db.session.add(new_review)
         db.session.commit()
         return review_schema.dump(new_review), 201
-
-
-    @jwt_required()
-    def get(self):
-        user_id = get_jwt_identity()
-        user_reviews = Review.query.filter_by(review_about_id=user_id)
-        return reviews_schema.dump(user_reviews), 200
+    
 
 
 class GetUserInformation(Resource):
@@ -56,7 +58,16 @@ class GetUserInformation(Resource):
             user_information.liked_trucks = request.json['liked_trucks']  
         if "bio" in request.json:
             user_information.bio = request.json['bio']
+        db.session.commit()
         return user_schema.dump(user_information), 200
+    
+class SpecificUserId(Resource):
+    def get(self, user_id):
+        user_information = db.one_or_404(
+            User.query.filter_by(id=user_id)
+            )
+        return user_schema.dump(user_information), 200
+   
 
 class PostFeedResource(Resource):
     @jwt_required()
@@ -74,3 +85,25 @@ class PostFeedResource(Resource):
         user_id = get_jwt_identity()
         user_posts = Post.query.filter_by(comment_about_post_id=user_id)
         return posts_schema.dump(user_posts), 200
+
+    def get(self):
+        all_posts = Post.query.all()
+        if User.is_owner_operator == True:
+            Post.query.filter_by('dispatcher' == True)
+
+        return posts_schema.dump(all_posts), 200
+    
+class DispatcherList(Resource):
+    def get(self):
+        list_dispatchers = User.query.filter_by(is_owner_operator = False)
+        return users_schema.dump(list_dispatchers)
+    
+
+class OOList(Resource):
+    def get(self):
+        list_owner_operator = User.query.filter_by(is_owner_operator = True)
+        return users_schema.dump(list_owner_operator)
+        
+
+
+      

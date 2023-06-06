@@ -29,13 +29,19 @@ export const AuthProvider = ({ children }) => {
 
   const registerUser = async (registerData) => {
     try {
+      let boolValue = true
+      if(registerData.is_owner_operator == "True"){
+        boolValue = true
+      }
       let finalData = {
         username: registerData.username,
         password: registerData.password,
         email: registerData.email,
         first_name: registerData.firstName,
         last_name: registerData.lastName,
+        is_owner_operator: boolValue,
       };
+      console.log(finalData)
       let response = await axios.post(`${BASE_URL}/register`, finalData);
       if (response.status === 201) {
         console.log("Successful registration! Log in to access token");
@@ -44,8 +50,13 @@ export const AuthProvider = ({ children }) => {
       } else {
         navigate("/register");
       }
+      if (finalData.is_owner_operator == true) {
+        navigate("/owneroperator");
+      } else{
+        navigate("/dispatcher")
+      }
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
     }
   };
 
@@ -85,6 +96,7 @@ export const AuthProvider = ({ children }) => {
     logoutUser,
     registerUser,
     isServerError,
+    
   };
 
   return (

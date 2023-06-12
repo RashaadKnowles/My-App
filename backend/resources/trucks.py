@@ -1,8 +1,8 @@
 from flask import request
 from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 from flask_restful import Resource
-from database.models import db, Review, User,Post
-from database.schemas import user_schema, users_schema,reviews_schema,review_schema, post_schema, posts_schema
+from database.models import db, Review, User,Post,SpecificPost
+from database.schemas import user_schema, users_schema,reviews_schema,review_schema, post_schema, posts_schema,specific_post_schema,specific_posts_schema
 
 
 class UserReviewResource(Resource):
@@ -106,4 +106,19 @@ class OOList(Resource):
         
 
 
-      
+class SpecificPostFeedResource(Resource):
+    @jwt_required()
+    def post(self):
+        user_id = get_jwt_identity()
+        form_data = request.get_json()
+        specific_new_post = specific_post_schema.load(form_data)
+        specific_new_post.written_review_id = user_id
+        db.session.add(specific_new_post)
+        db.session.commit()
+        return specific_post_schema.dump(specific_new_post), 201
+
+    @jwt_required()
+    def get(self):
+        user_id = get_jwt_identity()
+        user_posts = SpecificPost.query.filter_by(comment_about_specific_post_id=user_id)
+        return specific_posts_schema.dump(user_posts), 200

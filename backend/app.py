@@ -8,7 +8,7 @@ from database.models import db
 from database.schemas import ma
 from resources.auth import LoginResource, RegisterResource
 from resources.cars import AllCarResource, UserCarResource
-from resources.trucks import UserReviewResource, GetUserInformation,PostFeedResource,DispatcherList,OOList,SpecificUserId,PostUserReview
+from resources.trucks import UserReviewResource, GetUserInformation,PostFeedResource,DispatcherList,OOList,SpecificUserId,PostUserReview,SpecificPostFeedResource
 from dotenv import load_dotenv
 from os import environ
 
@@ -64,4 +64,5 @@ def create_routes():
     api.add_resource(OOList, '/api/pulloolist')
     api.add_resource(SpecificUserId, '/specificuser/<int:user_id>')
     api.add_resource(PostUserReview,'/api/postuserreview')
+    api.add_resource(SpecificPostFeedResource,'/api/specificuserpost')
     return api

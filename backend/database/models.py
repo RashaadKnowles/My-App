@@ -54,7 +54,8 @@ class Post(db.Model):
     comment_about_post = db.relationship("User",foreign_keys=[comment_about_post_id])
 
 
-    
-
-
-
+class SpecificPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.String(225), nullable=False)
+    comment_about_specific_post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    comment_about_specific_post = db.relationship("Post",foreign_keys=[comment_about_specific_post_id])

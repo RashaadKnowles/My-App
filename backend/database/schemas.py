@@ -1,6 +1,6 @@
 from flask_marshmallow import Marshmallow
 from marshmallow import post_load, fields
-from database.models import User, Car, Review, Post
+from database.models import User, Car, Review, Post,SpecificPost
 
 ma = Marshmallow()
 
@@ -117,3 +117,20 @@ class PostSchema(ma.Schema):
         return Post(**data)
 post_schema = PostSchema()
 posts_schema = PostSchema(many=True)
+
+
+
+class SpecificPostSchema(ma.Schema):
+    id = fields.Integer(primary_key=True)
+    comment = fields.String(required=True)
+    comment_about_specific_post_id = fields.Integer()
+    comment_about_specific_post = ma.Nested(UserSchema, many=False)
+
+    class Meta:
+        fields = ('id', "comment", "comment_about_specific_post_id", "comment_about_specific_post")
+
+    @post_load
+    def create_post(self,data, **kwargs):
+        return SpecificPost(**data)
+specific_post_schema = PostSchema()
+specific_posts_schema = PostSchema(many=True)

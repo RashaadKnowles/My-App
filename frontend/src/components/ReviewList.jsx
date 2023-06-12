@@ -37,6 +37,7 @@ function ReviewList() {
         })  
             .then((response) => {
             console.log("Thanks for the Review!!!")
+            getReviews()
             console.log(response.data)
             }) 
             .catch ((error) => {

@@ -40,12 +40,13 @@ function PostForm({ onNewPost,getPosts }) {
 }
 
 function PostList({ posts }) {
+  console.log(posts)
   return (
     <div>
       <h2>Posts</h2>
       {posts.map((post) => (
         <div key={post.id}>
-          <p>{post.comment}</p>
+          <p>{post.comment_about_post?.email}</p>
         </div>
       ))}
     </div>

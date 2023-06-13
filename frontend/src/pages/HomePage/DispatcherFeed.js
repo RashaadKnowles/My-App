@@ -9,7 +9,7 @@ function PostForm({ onNewPost,getPosts }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://127.0.0.1:5000/api/posttofeed', { comment:content,comment_about_post_id:user.id }, {
+    axios.post('http://127.0.0.1:5000/api/specificuserpost', { comment:content,post_about_specific_post_id:user.id }, {
       headers: {
         Authorization: "Bearer " + token,
     }})
@@ -47,7 +47,7 @@ function PostList({ posts }) {
       {posts.map((post) => (
         <div key={post.id}>
           <p>{post.comment}</p>
-          <p>{post.comment_about_post?.email}</p>
+          <p>{post.post_about_specific_post?.email}</p>
         </div>
       ))}
     </div>
@@ -88,7 +88,7 @@ function DispatcherFeed() {
   const [user, token] = useAuth();
   const [posts, setPosts] = useState([]);
   const getPosts = () => {
-    axios.get('http://127.0.0.1:5000/api/posttofeed', {
+    axios.get('http://127.0.0.1:5000/api/specificuserpost', {
       headers: {
         Authorization: "Bearer " + token,
     }}) 

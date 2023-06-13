@@ -53,6 +53,7 @@ function ReviewList() {
                 {reviews.map((review) => (
                     <div key={review.id}>
                         <p>{review.comment}</p>
+                        <p>{review.written_review?.email}</p>
                     </div>
                 ))}
             </div>

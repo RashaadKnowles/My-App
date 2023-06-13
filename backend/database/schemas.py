@@ -123,14 +123,16 @@ posts_schema = PostSchema(many=True)
 class SpecificPostSchema(ma.Schema):
     id = fields.Integer(primary_key=True)
     comment = fields.String(required=True)
+    post_about_specific_post_id = fields.Integer()
+    post_about_specific_post = ma.Nested(UserSchema, many=False)
     comment_about_specific_post_id = fields.Integer()
-    comment_about_specific_post = ma.Nested(UserSchema, many=False)
+    comment_about_specific_post = ma.Nested(PostSchema, many=False)
 
     class Meta:
-        fields = ('id', "comment", "comment_about_specific_post_id", "comment_about_specific_post")
+        fields = ('id', "comment", "post_about_specific_post_id", "post_about_specific_post", "comment_about_specific_post_id", "comment_about_specific_post")
 
     @post_load
     def create_post(self,data, **kwargs):
         return SpecificPost(**data)
-specific_post_schema = PostSchema()
-specific_posts_schema = PostSchema(many=True)
+specific_post_schema = SpecificPostSchema()
+specific_posts_schema = SpecificPostSchema(many=True)

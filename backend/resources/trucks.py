@@ -112,7 +112,7 @@ class SpecificPostFeedResource(Resource):
         user_id = get_jwt_identity()
         form_data = request.get_json()
         specific_new_post = specific_post_schema.load(form_data)
-        specific_new_post.written_review_id = user_id
+        specific_new_post.post_about_specific_post_id = user_id
         db.session.add(specific_new_post)
         db.session.commit()
         return specific_post_schema.dump(specific_new_post), 201

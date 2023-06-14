@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useAuth from "../../hooks/useAuth";
+import "./DispatcherFeed.css"
 
 
 function PostForm({ onNewPost,getPosts }) {
@@ -8,6 +9,7 @@ function PostForm({ onNewPost,getPosts }) {
   const [content, setContent] = useState('');
 
   const handleSubmit = (event) => {
+    <link rel="stylesheet" type='text/css' href= "styles/styles.css" ></link>
     event.preventDefault();
     axios.post('http://127.0.0.1:5000/api/specificuserpost', { comment:content,post_about_specific_post_id:user.id }, {
       headers: {
@@ -42,9 +44,11 @@ function PostForm({ onNewPost,getPosts }) {
 function PostList({ posts }) {
   console.log(posts)
   return (
-    <div>
+    
+    <div className="feed-container">
       <h2>Posts</h2>
       {posts.map((post) => (
+        
         <div key={post.id}>
           <p>{post.comment}</p>
           <p>{post.post_about_specific_post?.email}</p>
@@ -75,7 +79,7 @@ function CommentSection(){
         <textarea value={newComment} onChange={handleCommentChange} />
         <button type="submit">Submit</button>
       </form>
-      <ul>
+      <ul className="comments">
         {comments.map((comment, index) => (
           <li key={index}>{comment}</li>
         ))}
